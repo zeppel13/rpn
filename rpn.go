@@ -473,7 +473,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.exponent()
 		case "lifetheuniverseandeverything":
 			go fmt.Println("42")
-		case "distance":
+		case "distance", "coord":
 			calc.calcDistance()
 
 		case "show":
