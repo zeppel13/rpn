@@ -91,6 +91,12 @@ func (ca *Calc) cbrt() {
 	ca.stack[0] = math.Cbrt(ca.stack[0])
 }
 
+// xrt ...
+func (ca *Calc) xrt() {
+	ca.stack[0] = math.Pow(ca.stack[1], 1/ca.stack[0])
+	ca.refitStack()
+}
+
 func (ca *Calc) modulo() {
 	ca.stack[0] = (float64)((int64)(ca.stack[1]) % (int64)(ca.stack[0]))
 	ca.refitStack()
@@ -434,7 +440,9 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.sqrt()
 		case "cbrt":
 			calc.cbrt()
-		case "swap":
+		case "xrt":
+			calc.xrt()
+		case "swap", "sw":
 			calc.swapXY()
 		case "r":
 			calc.rotateStack()
@@ -446,7 +454,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.modulo()
 		case "%":
 			calc.modulo()
-		case "ox":
+		case "ux":
 			calc.overX()
 
 		case "sin":
@@ -473,7 +481,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.exponent()
 		case "lifetheuniverseandeverything":
 			go fmt.Println("42")
-		case "distance", "coord":
+		case "distance":
 			calc.calcDistance()
 
 		case "show":
