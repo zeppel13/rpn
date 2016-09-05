@@ -473,14 +473,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.ln()
 		case "log":
 			calc.logbe()
-		case "pq":
-			calc.pqSolver()
-		case "ex":
-			calc.exponent()
-		case "lifetheuniverseandeverything":
-			go fmt.Println("42")
-		case "distance":
-			calc.calcDistance()
+.calcDistance()
 
 		case "show":
 			showVariables(*calc)
