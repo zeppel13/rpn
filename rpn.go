@@ -542,3 +542,5 @@ func main() {
 	inputLoop(&rpn, commands)
 
 }
+
+// asdfkasödjfaösdlj
