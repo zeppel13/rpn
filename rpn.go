@@ -141,13 +141,11 @@ func (ca *Calc) exponent() {
 // Basis = 10
 func (ca *Calc) lg() {
 	ca.stack[0] = math.Log10(ca.stack[0])
-	ca.refitStack()
 }
 
 // Basis = e
 func (ca *Calc) ln() {
 	ca.stack[0] = math.Log(ca.stack[0])
-	ca.refitStack()
 }
 
 // log_b n = x
