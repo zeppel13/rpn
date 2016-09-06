@@ -473,7 +473,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.ln()
 		case "log":
 			calc.logbe()
-.calcDistance()
+		case "distance":
+			calc.calcDistance()
 
 		case "show":
 			showVariables(*calc)
