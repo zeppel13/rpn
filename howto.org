@@ -197,12 +197,13 @@ primzahl : 13
 ** Designkram
 
 | Befehl | Funtktion, Paramenter(Freunde) |
+|--------+--------------------------------|
 | view   | Toggle Stackanzeige            |
 | print  | Stack einmalig zeigen          |
 | bin    | Binäres (gerundetes) Ergbnis   |
 
 * Achtung
 
-Es kann ab und an auch etwas Schiefgehen. Die Benutzung ist frei und
-volkommen eigenverantwortlich.
+Es kann ab und an auch etwas schiefgehen. Die Benutzung ist frei und
+vollkommen eigenverantwortlich.
   
