@@ -8,13 +8,13 @@ Es lohnt sich in den Quelltext zu schauen.
 
 ** Normale Befehle, die man auch braucht
 
-| Befehl  | Funktion                |
-|---------+-------------------------|
-| [Enter] | Befehl bearbeiten       |
-| sw      | Registertauschen(1<->2) |
-| r       | Regiser rollen          |
-| drop    | Letztes Registerlöschen |
-| reset   | Alle Register löschen   |
+| Befehl  | Funktion                 |
+|---------+--------------------------|
+| [Enter] | Befehl bearbeiten        |
+| sw      | Registertauschen(1<->2)  |
+| r       | Regiser rollen           |
+| drop    | Letztes Register löschen |
+| reset   | Alle Register löschen    |
 
 Operatoren und Operanden werden in eine Zeile eingegeben und mit
 [Enter] abgearbeitet. Es lassen sich die Eingaben zum Erhalt der
@@ -75,7 +75,7 @@ Beispiel:
 
 3+4+3+6+9
 
-3 4 a 3 a 6 9
+3 4 a 3 a 6 a 9 a 
 = 25
 
 | Konstante |
@@ -104,8 +104,6 @@ Komm Standardkram.
 
 0 cos 
 = r
-
-Ob die A(trig) gehen, weiß ich gerade nicht. Schau im Code nach.
 
 | Logarithmen | Erklärung                    |
 |-------------+------------------------------|

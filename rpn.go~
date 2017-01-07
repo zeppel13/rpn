@@ -132,23 +132,18 @@ func (ca *Calc) exponent() {
 	ca.refitStack()
 }
 
-// Basis = 10
 func (ca *Calc) lg() {
 	ca.stack[0] = math.Log10(ca.stack[0])
 	ca.refitStack()
 }
 
-// Basis = e
 func (ca *Calc) ln() {
 	ca.stack[0] = math.Log(ca.stack[0])
 	ca.refitStack()
 }
 
-// log_b n = x
-// ca.stack[0] = b
-// ca.stack[1] = n
 func (ca *Calc) logbe() {
-	ca.stack[0] = math.Log10(ca.stack[1]) / math.Log10(ca.stack[0])
+	ca.stack[0] = math.Log(ca.stack[0]) / math.Log(ca.stack[1])
 	ca.refitStack()
 }
 
@@ -465,7 +460,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.lg()
 		case "ln":
 			calc.ln()
-		case "log":
+		case "logbe":
 			calc.logbe()
 		case "pq":
 			calc.pqSolver()
