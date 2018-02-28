@@ -1,6 +1,6 @@
 /* This is ##NAME##(working title rpn), an easy commandline RPN-based calculator
  *
- * Copyright (C) Sebastian Kind 2015
+ * Copyleft~Copyright~ (C) Sebastian Kind 2015-2018
  *
  *
  *
@@ -27,9 +27,11 @@ import (
 
 // ads
 type Calc struct {
-	stack     [4]float64
-	variables map[string]float64 // ... nil map
-	visible   bool
+	stack         [4]float64
+	variables     map[string]float64 // ... nil map
+	visible       bool
+	programming   bool
+	programMemory map[string]*Program //später mal vom Typ []Program, um mehrere Programme zu verwalten
 }
 
 const (
@@ -281,6 +283,11 @@ func (ca Calc) getVariableMap() map[string]float64 {
 	return ca.variables
 }
 
+func (ca Calc) addProgram(label string) {
+	prog := newProgram(label)
+	ca.programMemory[label] = prog
+}
+
 // ************************************************************************** //
 type rpnCommands struct {
 	commands []string
@@ -320,6 +327,47 @@ func (r *rpnCommands) use() {
 
 func (r *rpnCommands) stop() {
 	r.inUse = false
+}
+
+// ************************************************************************** //
+
+type Program struct {
+	label        string
+	instructions []string
+	ip           int // instructionpointer
+}
+
+func (p *Program) insertCommand(com string) {
+	p.instructions = append(p.instructions, com)
+}
+
+func (p Program) printProgram() {
+	for _, v := range p.instructions {
+		fmt.Println(v)
+	}
+}
+
+func (p *Program) loadCommand() string {
+	com := p.instructions[p.ip]
+	return com
+}
+
+func (p *Program) incIp() {
+	if p.ip < len(p.instructions) {
+		p.ip++
+	}
+}
+
+func (ca *Calc) programMode() {
+	ca.programming = !ca.programming
+}
+
+func newProgram(label string) *Program {
+	return &Program{label, []string{""}, 0}
+}
+
+func runstop() {
+	//FIXME rpn soll alle befehle im Program slice evaluieren
 }
 
 // ************************************************************************** //
@@ -447,13 +495,13 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 
 		case "p":
 			calc.pow()
-		case "x2":
+		case "x2", "x^2":
 			calc.xpow2()
 		case "sqrt":
 			calc.sqrt()
 		case "cbrt":
 			calc.cbrt()
-		case "swap":
+		case "swap", "<->":
 			calc.swapXY()
 		case "r":
 			calc.rotateStack()
@@ -465,7 +513,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.modulo()
 		case "%":
 			calc.modulo()
-		case "ox":
+		case "ox", "x^-1", "1/X", "/X":
 			calc.overX()
 
 		case "sin":
@@ -487,8 +535,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 		case "log":
 			calc.logbe()
 		case "pq":
-			calc.pqSolver()
-		case "ber":
+			calc.pqSolver() //kann keine komplexen Ergebnisse
+		case "ber", "bernoulli":
 			calc.bernoulli()
 		case "ex":
 			calc.exponent()
@@ -524,6 +572,18 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			printStack(calc)
 		case "bin":
 			calc.printBin()
+
+			//change sign
+		case "chs", "CHS", "+-", "-+":
+			calc.stack[0] *= -1
+		case "":
+			calc.enter(calc.stack[0])
+		case "program", "prgm":
+			calc.programMode()
+
+		case "r/s", "rs", "runstop":
+			runstop()
+
 		}
 
 	}
