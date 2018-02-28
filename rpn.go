@@ -29,6 +29,7 @@ import (
 type Calc struct {
 	stack     [4]float64
 	variables map[string]float64 // ... nil map
+	visible   bool
 }
 
 const (
@@ -181,6 +182,22 @@ func (ca *Calc) pqSolver() {
 		ca.stack[0] = -p / 2
 		ca.stack[1] = -p / 2
 	}
+}
+
+func (ca *Calc) bernoulli() {
+	/*
+			B(n;P;k) = (n binom p)*p^k*(1-p)^(n-k)
+		B(n;P;k_max;k_min)
+	*/
+	n := ca.stack[3]
+	p := ca.stack[2]
+	min := ca.stack[1]
+	//max := ca.stack[0]
+	//FIXME Binomial
+	B := (n + p) * math.Pow(p, min) * math.Pow(1-p, n-min)
+
+	ca.stack[0] = B
+
 }
 
 // Orthodromen-Strecke zwischen zwei Koordinaten ausrechnen.
@@ -385,12 +402,14 @@ func version() {
 // ***************** Mainloop
 func inputLoop(calc *Calc, cmd rpnCommands) {
 	stackView := 1
-	for true {
+	if !calc.visible {
+		stackView = -1
+	}
 
+	for true {
 		if stackView == 1 {
 			printStack(calc)
 		}
-
 		input := nextCommand(&cmd)
 		x, err := strconv.ParseFloat(input, 64)
 		if err == nil {
@@ -469,6 +488,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.logbe()
 		case "pq":
 			calc.pqSolver()
+		case "ber":
+			calc.bernoulli()
 		case "ex":
 			calc.exponent()
 		case "lifetheuniverseandeverything":
@@ -478,10 +499,10 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 
 		case "show":
 			showVariables(*calc)
-		case "->":
+		case "->", "sto", "STO":
 			inputName := nextCommand(&cmd)
 			calc.setVariable(inputName)
-		case "get":
+		case "get", "rcl", "RCL":
 			inputName := nextCommand(&cmd)
 			calc.getVariable(inputName)
 
@@ -504,6 +525,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 		case "bin":
 			calc.printBin()
 		}
+
 	}
 }
 
@@ -512,11 +534,14 @@ func main() {
 		rpn      Calc
 		commands rpnCommands
 	)
+	rpn.visible = true
 
 	//Flagparsing
 	pathPtr := flag.String("r", "", "./foo/bar Run a script. Type path like this")
+	//evalPtr := flag.Bool("e", false, "evaluate rpn expression")
 	hidePtr := flag.Bool("hide", false, "Tell the programm to hide stack information, 'cuz u r like A B0ZZ \xF0\x9F\x98\x8E")
 	versPtr := flag.Bool("version", false, "Displav Version")
+	debugPtr := flag.Bool("debug", false, "show fancy information")
 	flag.Parse()
 	//fmt.Println("run-flag:", *pathPtr)
 	//fmt.Println("hide-flag:", *hidePtr)
@@ -525,14 +550,31 @@ func main() {
 	if *pathPtr != "" {
 		loadAndRunScript(*pathPtr, &commands)
 	}
-	if *hidePtr == true {
-		commands.setPrio("view")
-	}
 	if *versPtr == true {
 		version()
+	}
+	if len(flag.Args()) > 0 {
+		//localFuckingStringSlice := strings.Split(*evalPtr, " ")
+		tail := flag.Args()
+		if *debugPtr {
+			fmt.Println(tail)
+		}
+
+		tail = append(tail, "print", "q")
+		rpn.visible = false
+		commands.setCommands(tail)
+		commands.use()
+
+	}
+	if *hidePtr == true {
+		commands.setPrio("view")
 	}
 
 	rpn.variables = make(map[string]float64, 4)
 	inputLoop(&rpn, commands)
 
+}
+
+func cancer() {
+	fmt.Println("Cancerous Debug badabim badabom")
 }
