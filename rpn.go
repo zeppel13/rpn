@@ -27,11 +27,12 @@ import (
 
 // ads
 type Calc struct {
-	stack         [4]float64
-	variables     map[string]float64 // ... nil map
-	visible       bool
-	programming   bool
-	programMemory map[string]*Program //später mal vom Typ []Program, um mehrere Programme zu verwalten
+	stack       [4]float64
+	variables   map[string]float64 // ... nil map
+	visible     bool
+	programming bool
+	//programMemory map[string]*Program // 1985
+	programMemory *Program // 1971 später mal vom Typ []Program, um mehrere Programme zu verwalten
 }
 
 const (
@@ -285,7 +286,8 @@ func (ca Calc) getVariableMap() map[string]float64 {
 
 func (ca Calc) addProgram(label string) {
 	prog := newProgram(label)
-	ca.programMemory[label] = prog
+	//ca.programMemory[label] = prog
+	ca.programMemory = prog
 }
 
 // ************************************************************************** //
@@ -366,9 +368,15 @@ func newProgram(label string) *Program {
 	return &Program{label, []string{""}, 0}
 }
 
-func runstop() {
+/*
+func runstop(ca *Calc) {
+	ca.programMemory.ip = 0
+	for _, com := range ca.programMemory.instructions {
+
+	}
 	//FIXME rpn soll alle befehle im Program slice evaluieren
 }
+*/
 
 // ************************************************************************** //
 func loadAndRunScript(filePath string, cmd *rpnCommands) {
@@ -582,7 +590,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.programMode()
 
 		case "r/s", "rs", "runstop":
-			runstop()
+			//			runstop()
 
 		}
 
