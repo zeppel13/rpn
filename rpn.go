@@ -42,6 +42,8 @@ const (
 	VERSION = "0.1.1"
 )
 
+var dp int = 10
+
 func (ca *Calc) enter(xValue float64) {
 	ca.stack[3] = ca.stack[2]
 	ca.stack[2] = ca.stack[1]
@@ -419,9 +421,14 @@ func saveMemory(fileName string, ca Calc) {
 func printStack(calc *Calc) {
 	fmt.Println("-----------------------")
 	fmt.Println()
+	front := "Stack %d: %."
+	back := "g\t\t%x\n"
+	printString := front + strconv.Itoa(dp) + back
+	//printString := "Stack %d: %.2g\t\t%x\n"
+
 	for i := range calc.getStack() {
 		stackValue := (int64)(calc.getStack()[3-i])
-		fmt.Printf("Stack %d: %v\t\t%x\n", 3-i, calc.getStack()[3-i], stackValue)
+		fmt.Printf(printString, 3-i, calc.getStack()[3-i], stackValue)
 	}
 }
 
@@ -591,6 +598,11 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 
 		case "r/s", "rs", "runstop":
 			//			runstop()
+
+		case "dp":
+			dp = (int)(calc.stack[0])
+			calc.stack[0] = calc.stack[1]
+			calc.refitStack()
 
 		}
 
