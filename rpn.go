@@ -42,7 +42,7 @@ const (
 	VERSION = "0.1.1"
 )
 
-var dp int = 10
+var dp int = 2
 
 func (ca *Calc) enter(xValue float64) {
 	ca.stack[3] = ca.stack[2]
@@ -147,7 +147,6 @@ func (ca *Calc) lg() {
 // Basis = e
 func (ca *Calc) ln() {
 	ca.stack[0] = math.Log(ca.stack[0])
-	ca.refitStack()
 }
 
 // log_b n = x
@@ -242,6 +241,17 @@ func (ca *Calc) calcDistance() {
 	distance = 2 * pi * 6371 * ((angle * 180 / pi) / 360)
 
 	ca.stack[0] = distance
+}
+
+func (ca *Calc) kurs() {
+	cash := ca.stack[2]
+	zinz := ca.stack[1]
+	jahre := ca.stack[0]
+
+	ca.stack[0] = cash * math.Pow(zinz, jahre)
+	ca.stack[1] = 0
+	ca.stack[2] = 0
+
 }
 
 func (ca *Calc) printBin() {
@@ -422,7 +432,7 @@ func printStack(calc *Calc) {
 	fmt.Println("-----------------------")
 	fmt.Println()
 	front := "Stack %d: %."
-	back := "g\t\t%x\n"
+	back := "f\t\t%x\n"
 	printString := front + strconv.Itoa(dp) + back
 	//printString := "Stack %d: %.2g\t\t%x\n"
 
@@ -486,7 +496,7 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			helpM()
 		case "help":
 			helpM()
-		case "reset":
+		case "reset", "clear", "cls":
 			calc.resetStack()
 		case "drop":
 			calc.drop()
@@ -559,6 +569,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			go fmt.Println("42")
 		case "distance":
 			calc.calcDistance()
+		case "kurs":
+			calc.kurs()
 
 		case "show":
 			showVariables(*calc)
