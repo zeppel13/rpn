@@ -132,7 +132,7 @@ func (ca *Calc) atan() {
 func (ca *Calc) exponent() {
 	// ca.stack[1] Value
 	// ca.stack[0] Exponent
-	ca.stack[0] = ca.stack[1] * math.Pow(10, ca.stack[0])
+	ca.stack[0] = math.Pow(e, ca.stack[0])
 	ca.refitStack()
 }
 
