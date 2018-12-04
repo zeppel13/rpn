@@ -14,15 +14,15 @@ The Link to my blog offers a German description.
 - Install Go any version should do fine
 - compile rpn with
 
-'''
+```
 cd ./rpn
 go build 
-'''
+```
 - test it 
 
-'''
+```
 rpn 3 3 a 5 d
-'''
+```
 
 should give you 1.20
 
@@ -31,6 +31,6 @@ floatingpoint processor your need to set this in order to compile and run correc
 Debian Linux. Somewhere on my old computers HDD should exist a small C Port for a 286 Personal Computer. But it shouldn't be too
 difficult to reprogram this software in any language.
 
-'''
+```
 GO386=387 go build
-'''
+```
