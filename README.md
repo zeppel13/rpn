@@ -27,9 +27,9 @@ rpn 3 3 a 5 d
 should give you 1.20
 
 If you wish to compile RPN for older computers e.g. with a Pentium II or anything else which has 387 compatible 
-floatingpoint processor your need to set this in order to compile and run correctly. Tested for a Pentium II on Windows XP and 
+floatingpoint processor, you need to set this in order to compile and run it correctly. Tested for a Pentium II on Windows XP and 
 Debian Linux. Somewhere on my old computers HDD should exist a small C Port for a 286 Personal Computer. But it shouldn't be too
-difficult to reprogram this software in any language.
+difficult to reprogram this software in any language by yourself.
 
 ```
 GO386=387 go build
