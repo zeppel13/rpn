@@ -9,6 +9,10 @@ as long as you mention my name somewhere. Feel free to contact me.
 
 https://sebastiankind.de/post/terminalrechner
 
+and 
+
+https://github.com/zeppel13/rpn/blob/master/howto.org
+
 The Link to my blog offers a German description.
 
 - Install Go any version should do fine
