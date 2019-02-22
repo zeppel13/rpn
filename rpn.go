@@ -157,6 +157,23 @@ func (ca *Calc) logbe() {
 	ca.refitStack()
 }
 
+func (ca *Calc) lb() {
+	ca.stack[0] = math.Log2(ca.stack[0])
+}
+
+func (ca *Calc) peta() {
+	c, v := 0, ca.stack[0]
+	for v >= 1024 {
+		v /= 1024
+		c++
+	}
+
+	ca.stack[1] = v
+	ca.stack[0] = (float64)(c)
+	fmt.Println("peta: 1=KiB, 2=MiB, 3=GiB, 4=TiB, 5=PiB, 6=EiB")
+	fmt.Println("Stack1 * 1024 ^Stack0")
+}
+
 // useless
 func (ca *Calc) zTest() {
 	// This functoin checks weather the value in ca.stack[0] is eaqual to zero
@@ -557,6 +574,10 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.lg()
 		case "ln":
 			calc.ln()
+		case "lb":
+			calc.lb()
+		case "peta":
+			calc.peta()
 		case "log":
 			calc.logbe()
 		case "pq":
