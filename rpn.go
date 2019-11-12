@@ -1,6 +1,6 @@
 /* This is ##NAME##(working title rpn), an easy commandline RPN-based calculator
  *
- * Copyleft~Copyright~ (C) Sebastian Kind 2015-2018
+ * Copyleft~Copyright~ (C) Sebastian Alexander Kind 2015-2019
  *
  *
  *
@@ -45,6 +45,8 @@ const (
 var dp int = 2
 
 func (ca *Calc) enter(xValue float64) {
+	//ca.stack[5] = ca.stack[4]
+	//ca.stack[4] = ca.stack[3]
 	ca.stack[3] = ca.stack[2]
 	ca.stack[2] = ca.stack[1]
 	ca.stack[1] = ca.stack[0]
@@ -61,6 +63,16 @@ func (ca *Calc) add() {
 	ca.stack[0] += ca.stack[1]
 	ca.refitStack()
 }
+
+func (ca *Calc) superAdd() {
+	h := 0.0
+	for _, f := range ca.stack {
+		h += f
+		ca.refitStack()
+	}
+	ca.stack[0] = h
+}
+
 func (ca *Calc) sub() {
 	ca.stack[0] = ca.stack[1] - ca.stack[0]
 	ca.refitStack()
@@ -299,6 +311,13 @@ func (ca *Calc) refitStack() {
 	ca.stack[1] = ca.stack[2]
 	ca.stack[2] = ca.stack[3]
 	ca.stack[3] = 0
+
+	// try for a dynamic stack
+	// for i := len(ca.stack) - 1; i > 0; i-- {
+	// 	ca.stack[i-1] = ca.stack[i]
+	// }
+	// ca.stack[len(ca.stack)-1] = 0.0
+
 }
 
 func (ca *Calc) setVariable(varName string) {
@@ -446,6 +465,10 @@ func saveMemory(fileName string, ca Calc) {
 }
 
 func printStack(calc *Calc) {
+	if *pipePtr {
+		fmt.Printf("%f\n", calc.stack[0])
+		return
+	}
 	fmt.Println("-----------------------")
 	fmt.Println()
 	front := "Stack %d: %."
@@ -520,6 +543,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 
 		case "a":
 			calc.add()
+		case "A":
+			calc.superAdd()
 		case "+":
 			calc.add()
 		case "s":
@@ -642,6 +667,8 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 	}
 }
 
+var pipePtr *bool
+
 func main() {
 	var (
 		rpn      Calc
@@ -655,6 +682,7 @@ func main() {
 	hidePtr := flag.Bool("hide", false, "Tell the programm to hide stack information, 'cuz u r like A B0ZZ \xF0\x9F\x98\x8E")
 	versPtr := flag.Bool("version", false, "Displav Version")
 	debugPtr := flag.Bool("debug", false, "show fancy information")
+	pipePtr = flag.Bool("p", false, "show result of X-Register to be piped into different program")
 	flag.Parse()
 	//fmt.Println("run-flag:", *pathPtr)
 	//fmt.Println("hide-flag:", *hidePtr)
@@ -681,6 +709,9 @@ func main() {
 	}
 	if *hidePtr == true {
 		commands.setPrio("view")
+	}
+	if *pipePtr {
+		// good question. only print stack[0]
 	}
 
 	rpn.variables = make(map[string]float64, 4)
