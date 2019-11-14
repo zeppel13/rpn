@@ -217,11 +217,16 @@ func (ca *Calc) pqSolver() {
 	}
 }
 
+// Kumulierte Wahrscheinlichkeiten berechen:
+// Beispielfrage: Wie groß ist die Wahrscheinlichkeit bei 6 Würfen
+// mindestens dreimal die 2 zu würfeln?
+
 func (ca *Calc) bernoulli() {
 	/*
-			B(n;P;k) = (n binom p)*p^k*(1-p)^(n-k)
+		B(n;P;k) = (n binom p)*p^k*(1-p)^(n-k)
 		B(n;P;k_max;k_min)
 	*/
+
 	n := ca.stack[3]
 	p := ca.stack[2]
 	min := ca.stack[1]
@@ -613,6 +618,10 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.exponent()
 		case "lifetheuniverseandeverything":
 			go fmt.Println("42")
+		case "eris":
+			fmt.Println("23, Kallisti")
+		case "dreiundzwanzig":
+			fmt.Println("23 >> 42  https://chaosradio.de/chaosradio_23")
 		case "distance":
 			calc.calcDistance()
 		case "kurs":
