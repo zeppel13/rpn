@@ -1,0 +1,2 @@
+#!/bin/bash
+go build -ldflags "-X main.version_date=`date +%d_%m_%Y__%H:%M`"

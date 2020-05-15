@@ -39,7 +39,11 @@ const (
 	e  = 2.71828182846
 	pi = 3.14159265359
 	//VERSION (obvious informatoin)
-	VERSION = "0.1.1"
+)
+
+var (
+	version_date = ""
+	VERSION      = "0.2"
 )
 
 var dp int = 2
@@ -173,6 +177,10 @@ func (ca *Calc) lb() {
 	ca.stack[0] = math.Log2(ca.stack[0])
 }
 
+func (ca *Calc) bibytes(exp float64) {
+	ca.stack[0] = ca.stack[0] * math.Pow(1024, exp)
+}
+
 func (ca *Calc) peta() {
 	c, v := 0, ca.stack[0]
 	for v >= 1024 {
@@ -184,6 +192,14 @@ func (ca *Calc) peta() {
 	ca.stack[0] = (float64)(c)
 	fmt.Println("peta: 1=KiB, 2=MiB, 3=GiB, 4=TiB, 5=PiB, 6=EiB")
 	fmt.Println("Stack1 * 1024 ^Stack0")
+}
+
+func (ca *Calc) minutes() {
+	ca.stack[0] = ca.stack[0] / 60
+}
+
+func (ca *Calc) hours() {
+	ca.stack[0] = ca.stack[0] / 3600
 }
 
 // useless
@@ -514,7 +530,7 @@ func helpM() {
 }
 
 func version() {
-	fmt.Println("This is rpn Version", VERSION, "by Sebastian Kind (c) 2015 - 2016 #Yolo-Licence: use this Program at your own risk.")
+	fmt.Println("This is rpn Version", VERSION, version_date, "by Sebastian Kind (c) 2015 - 2020 #Yolo-Licence: use this Program at your own risk.")
 }
 
 // ***************** Mainloop
@@ -606,8 +622,26 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 			calc.ln()
 		case "lb":
 			calc.lb()
+
+		case "kib", "KIB", "KiB", "Kib":
+			calc.bibytes(1.0)
+		case "mib", "MIB", "MiB", "Mib":
+			calc.bibytes(2.0)
+		case "gib", "GIB", "GiB", "Gib":
+			calc.bibytes(3.0)
+		case "tib", "TIB", "TiB", "Tib":
+			calc.bibytes(4.0)
+		case "pib", "PIB", "PiB", "Pib":
+			calc.bibytes(5.0)
+
 		case "peta":
 			calc.peta()
+
+		case "minutes":
+			calc.minutes()
+		case "hours":
+			calc.hours()
+
 		case "log":
 			calc.logbe()
 		case "pq":
@@ -691,7 +725,7 @@ func main() {
 	hidePtr := flag.Bool("hide", false, "Tell the programm to hide stack information, 'cuz u r like A B0ZZ \xF0\x9F\x98\x8E")
 	versPtr := flag.Bool("version", false, "Displav Version")
 	debugPtr := flag.Bool("debug", false, "show fancy information")
-	pipePtr = flag.Bool("p", false, "show result of X-Register to be piped into different program")
+	pipePtr = flag.Bool("p", false, "this has no meaning")
 	flag.Parse()
 	//fmt.Println("run-flag:", *pathPtr)
 	//fmt.Println("hide-flag:", *hidePtr)
