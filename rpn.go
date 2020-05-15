@@ -1,4 +1,7 @@
-/* This is ##NAME##(working title rpn), an easy commandline RPN-based calculator
+/* This is ##NAME##(working title rpn), an easy commandline RPN-based
+ * calculator. This program is supposed to work only for me and
+ * carries a lot of bloat
+ *
  *
  * Copyleft~Copyright~ (C) Sebastian Alexander Kind 2015-2019
  *
@@ -655,7 +658,9 @@ func inputLoop(calc *Calc, cmd rpnCommands) {
 		case "eris":
 			fmt.Println("23, Kallisti")
 		case "dreiundzwanzig":
+			fmt.Println("Heil dir Eris")
 			fmt.Println("23 >> 42  https://chaosradio.de/chaosradio_23")
+			fmt.Println("Kallisti")
 		case "distance":
 			calc.calcDistance()
 		case "kurs":
